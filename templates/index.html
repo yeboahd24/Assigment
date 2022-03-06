@@ -1,0 +1,67 @@
+<html>
+{% load static %}
+  <head>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.5.1/cdn.js"
+      defer
+    ></script>
+    <script
+    defer
+    src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"
+  ></script>
+    
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+
+  <body>
+    <div class="main" x-data="init()">
+      <h4 class="font-xxlarge">Movie search in Alpine.js</h4>
+      <div class="searchArea">
+        <input
+          class="inputText"
+          type="text"
+          placeholder="Type to search a fact"
+          x-model="q"
+        />
+        <button class="bg-default" @click="search()">Search</button>
+      </div>
+      <div>
+        <template x-for="result in results">
+          <div class="movieCard">
+            <div>
+              <img x-bind:src="result.Poster" />
+            </div>
+            <div>
+              <div class="movieDetailItem">
+                <span style="padding-right: 5px">Title:</span
+                ><span><b x-text="result.Title">Man of Steel</b></span>
+              </div>
+              <div class="movieDetailItem">
+                <span style="padding-right: 5px">Year:</span
+                ><span><b x-text="result.Year">2008</b></span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <script>
+      function init() {
+        return {
+          results: [],
+          q: "",
+          search: function () {
+            fetch(
+              "http://www.omdbapi.com/?&apikey=e1a73560&s=" +
+                this.q +
+                "&type=movie"
+            )
+              .then((response) => response.json())
+              .then((response) => (this.results = response.Search))
+              .catch((err) => console.log(err));
+          },
+        };
+      }
+    </script>
+  </body>
+</html>

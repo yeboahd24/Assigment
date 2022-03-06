@@ -1,0 +1,2 @@
+python3.8.2
+django3.2
